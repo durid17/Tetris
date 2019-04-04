@@ -67,7 +67,7 @@ public class Piece {
 		this(parsePoints(points));
 	}
 
-	/**
+	/** 
 	 Returns the width of the piece measured in blocks.
 	*/
 	public int getWidth() {
@@ -107,8 +107,8 @@ public class Piece {
 	public Piece computeNextRotation() {
 		TPoint[] points = new TPoint[body.length];
 		for(int i = 0 ; i < body.length; i++) {
-			TPoint p = new TPoint(body[i].y , width - body[i].x - 1);
-			points[i] = p;
+			TPoint p = new TPoint(height - body[i].y - 1 , body[i].x);
+			points[i] = p; 
 		}
 		return new Piece(points);
 	} 
@@ -140,19 +140,24 @@ public class Piece {
 		// standard equals() technique 2
 		// (null will be false)
 		if (!(obj instanceof Piece)) return false;
+		Comparator<TPoint> localeComparator = new Comparator<TPoint>() {
+			public int compare(TPoint point1, TPoint point2) {
+				if(point1.x == point2.x) {
+					return point1.y - point2.y;
+				}
+				return point1.x - point2.x;
+			}
+		};
 		Piece other = (Piece)obj;
 		TPoint[] otherBody = other.getBody();
-		
-		if(otherBody.length != body.length) return false;
-		for(int i = 0 ; i < body.length; i++) {
-			boolean flag = false;
-			for(int j = 0 ; j < otherBody.length; j++) {
-				if(body[i].equals(otherBody[j])) flag = true;
-			}
-			if(!flag) return false;
-		}
+		Arrays.sort(body, localeComparator);
+		Arrays.sort(otherBody, localeComparator);
+		if( ! Arrays.equals(body, otherBody) ) return false;
+//		if(otherBody.length != body.length) return false;		
 		return true;
 	}
+	
+	
 
 
 	// String constants for the standard 7 tetris pieces
@@ -185,12 +190,12 @@ public class Piece {
 	*/
 	public static Piece[] getPieces() {	
 		// lazy evaluation -- create static array if needed
-		if (Piece.pieces==null) {
+		if (Piece.pieces==null) { 
 			// use makeFastRotations() to compute all the rotations for each piece
 			Piece.pieces = new Piece[] {
 				makeFastRotations(new Piece(STICK_STR)),
 				makeFastRotations(new Piece(L1_STR)),
-				makeFastRotations(new Piece(L2_STR)),
+				makeFastRotations(new Piece(L2_STR)), 
 				makeFastRotations(new Piece(S1_STR)),
 				makeFastRotations(new Piece(S2_STR)),
 				makeFastRotations(new Piece(SQUARE_STR)),
@@ -219,11 +224,11 @@ public class Piece {
 	private static Piece makeFastRotations(Piece root) {
 		Piece now = root;
 		while(true) {
-			Piece nextPiece = now.computeNextRotation();
+			Piece nextPiece = now.computeNextRotation(); 
 			now.next = nextPiece;
-			if(nextPiece.equals(root)) break;
+			if(nextPiece.equals(root)) break; 
 			now = nextPiece;
-		}
+		} 
 		return root;
 	}
 	
