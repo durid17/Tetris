@@ -85,9 +85,7 @@ public class BoardTest {
 		assertEquals(4, b.getColumnHeight(1));
 		assertEquals(3, b.getColumnHeight(2));
 		
-		System.out.println(b.toString()); 
 		c = b.clearRows();
-		System.out.println(b.toString());
 		assertEquals(3, c); 
 		assertEquals(2, b.getColumnHeight(0));
 		assertEquals(1, b.getColumnHeight(1));
@@ -161,6 +159,31 @@ public class BoardTest {
 		b.undo();
 		assertEquals(5, b.getMaxHeight());
 		assertEquals(4, b.getColumnHeight(0));
+	}
+	
+	@Test
+	public void testSample6() {
+		b = new Board(4, 5);
+		int h = b.dropHeight(new Piece(Piece.L2_STR), 1);
+		b.place(new Piece(Piece.L2_STR), 1, h);
+		b.commit();
+		
+		h = b.dropHeight(new Piece(Piece.PYRAMID_STR), 0);
+		assertEquals(3, h);	
+	}
+	@Test
+	public void testSample7() {
+		b = new Board(4, 5);
+		b.place(new Piece(Piece.SQUARE_STR), 1, 0);
+		b.commit();
+		
+//		System.out.println(b.toString()); 
+		int h = b.dropHeight(new Piece(Piece.S1_STR), 0);
+		assertEquals(2, h);
+		
+		b.place(new Piece(Piece.S1_STR), 0 , 2);
+//		System.out.println(b.toString());
+		
 	}
 	
 	

@@ -178,15 +178,26 @@ public class PieceTest {
 		//s2
 		assertTrue(pieces[Piece.S2].fastRotation().fastRotation().equals(pieces[Piece.S2]));
 		
+		//square
+		assertTrue(pieces[Piece.SQUARE].fastRotation().fastRotation().equals(pieces[Piece.SQUARE]));
+		
 		//l1
 		Piece L1 = pieces[Piece.L1];
 		Piece L2 = pieces[Piece.L2];
+		Piece pyramid = pieces[Piece.PYRAMID];
 		for(int i = 0 ; i < ROTATION_NUMBER ; i++) {
 			L1 = L1.fastRotation();
 			L2 = L2.fastRotation();
+			pyramid = pyramid.fastRotation();
 		}
 		assertTrue(L1.equals(pieces[Piece.L1]));
 		assertTrue(L2.equals(pieces[Piece.L2]));
+		assertTrue(pyramid.equals(pieces[Piece.PYRAMID]));
+		
+		pyramid = pyramid.fastRotation();
+		assertTrue(pyr[1].equals(pyramid));
+		
+		
 	}
 	
 }

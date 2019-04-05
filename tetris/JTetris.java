@@ -382,6 +382,7 @@ public class JTetris extends JComponent {
 			
 			case DROP:
 			 newY = board.dropHeight(newPiece, newX);
+//			 System.out.println(newY);
 			 
 			 // trick: avoid the case where the drop would cause
 			 // the piece to appear to move up

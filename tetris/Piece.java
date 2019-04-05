@@ -36,6 +36,15 @@ public class Piece {
 	*/
 	public Piece(TPoint[] points) {
 		body = Arrays.copyOf(points , points.length);
+		Comparator<TPoint> localeComparator = new Comparator<TPoint>() {
+			public int compare(TPoint point1, TPoint point2) {
+				if(point1.x == point2.x) {
+					return point1.y - point2.y;
+				}
+				return point1.x - point2.x;
+			}
+		};
+		Arrays.sort(body , localeComparator);
 		int right = 0;
 		int up = 0;
 		for(int i = 0 ; i < body.length; i++) {
@@ -140,20 +149,9 @@ public class Piece {
 		// standard equals() technique 2
 		// (null will be false)
 		if (!(obj instanceof Piece)) return false;
-		Comparator<TPoint> localeComparator = new Comparator<TPoint>() {
-			public int compare(TPoint point1, TPoint point2) {
-				if(point1.x == point2.x) {
-					return point1.y - point2.y;
-				}
-				return point1.x - point2.x;
-			}
-		};
 		Piece other = (Piece)obj;
 		TPoint[] otherBody = other.getBody();
-		Arrays.sort(body, localeComparator);
-		Arrays.sort(otherBody, localeComparator);
-		if( ! Arrays.equals(body, otherBody) ) return false;
-//		if(otherBody.length != body.length) return false;		
+		if( ! Arrays.equals(body, otherBody) ) return false;	
 		return true;
 	}
 	
@@ -225,8 +223,11 @@ public class Piece {
 		Piece now = root;
 		while(true) {
 			Piece nextPiece = now.computeNextRotation(); 
+			if(nextPiece.equals(root)) {
+				now.next = root;
+				break; 
+			}
 			now.next = nextPiece;
-			if(nextPiece.equals(root)) break; 
 			now = nextPiece;
 		} 
 		return root;
