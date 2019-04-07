@@ -146,7 +146,6 @@ public class BoardTest {
 		assertEquals(3, h);		
 		b.place(new Piece(Piece.PYRAMID_STR), 0 , h);
 		b.commit();
-		
 		result = b.place(new Piece(Piece.STICK_STR), 3, 1);
 		assertEquals(Board.PLACE_ROW_FILLED, result);
 		b.clearRows();
@@ -157,6 +156,7 @@ public class BoardTest {
 		assertEquals(2, b.getMaxHeight());
 		b.undo();
 		b.undo();
+		System.out.println(b.toString());
 		assertEquals(5, b.getMaxHeight());
 		assertEquals(4, b.getColumnHeight(0));
 	}

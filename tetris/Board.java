@@ -229,7 +229,7 @@ public class Board	{
 				from++;		
 			}
 		}	
-		if(widths[to] != width) updateHeights(to);
+		if(to < height && widths[to] != width) updateHeights(to);
 		for(int i = to; i < from ; i++) {
 			if(widths[i] == width) clearRow(i);
 		}

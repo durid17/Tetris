@@ -34,7 +34,7 @@ public class JBrainTetris extends JTetris{
 	
 	@Override
 	public Piece pickNextPiece() {
-		int ran = random.nextInt(99) + 1;
+		int ran = random.nextInt(98) + 1;
 		if(ran >= adversary.getValue()) {
 			adversaryMessage.setText("ok");
 			return super.pickNextPiece();
@@ -42,10 +42,20 @@ public class JBrainTetris extends JTetris{
 			adversaryMessage.setText("*ok*");
 			Brain.Move worst = null;
 			for(int i = 0 ; i < pieces.length; i++) {
-				Brain.Move curr = brain.bestMove(board, pieces[i], board.getHeight() - 4, null);
-				if( curr != null && (worst == null || curr.score > worst.score)) worst = curr;
+				Piece currPiece = pieces[i];
+				Brain.Move curr = brain.bestMove(board, currPiece, board.getHeight() - 4, null);
+				if( curr != null && (worst == null || curr.score > worst.score)) worst = curr;	
+				currPiece = currPiece.fastRotation();
+				while(!currPiece.equals(pieces[i])) {
+					curr = brain.bestMove(board, currPiece, board.getHeight() - 4, null);
+					if( curr != null && (worst == null || curr.score > worst.score)) worst = curr;	
+					currPiece = currPiece.fastRotation();
+				}
 			}
-			if(worst == null) return null;
+			if(worst == null)  {
+				stopGame();
+				return super.pickNextPiece();
+			}
 			return worst.piece;
 		}
 	}
@@ -70,10 +80,10 @@ public class JBrainTetris extends JTetris{
 	@Override
 	public void tick(int verb) {
 		if(!gameOn) return;
-		if(brainMode.isSelected()) {
-			if (currentPiece != null) {
+		if(brainMode.isSelected() && verb == JTetris.DOWN) {
+//			if (currentPiece != null) {
 				board.undo();
-			}
+//			}
 			if(localCount != super.count) {
 				next = brain.bestMove(board, currentPiece, board.getHeight() - 4, next);
 				localCount = super.count;
